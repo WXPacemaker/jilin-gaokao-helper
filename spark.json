@@ -1,0 +1,25 @@
+{
+  "app": {
+    "id": "app_17h23urapte",
+    "online_url": "https://4mcywx20pyumh.doubao.link/app/app_17h23urapte"
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "output": "dist/output",
+    "output_cdn": "dist/output_resource"
+  },
+  "dev": {
+    "command": [
+      "npm",
+      "run",
+      "dev"
+    ],
+    "port": 28913
+  },
+  "stack": "react-standard-webapp",
+  "version": "0.1.3"
+}

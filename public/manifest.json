@@ -1,0 +1,25 @@
+{
+  "name": "吉林高考志愿助手",
+  "short_name": "高考志愿助手",
+  "description": "吉林省高考志愿填报助手：批次线与省排名、院校/专业录取分、冲稳保智能推荐、选科对照、特殊类型招生、填报指南",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#16283f",
+  "theme_color": "#1e3a5f",
+  "icons": [
+    {
+      "src": "pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
