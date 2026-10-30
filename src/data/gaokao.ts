@@ -286,6 +286,38 @@ export const tierColor: Record<ITier, string> = {
   保: 'success',
 };
 
+/** 位次冲稳保判定说明 */
+export const RANK_TIERS = [
+  { tier: '冲', label: '冲刺', range: '院校位次高于考生位次 0—2000 名（院校更靠前、更难考）', color: 'warning' },
+  { tier: '稳', label: '稳妥', range: '院校位次低于考生位次 0—5000 名（院校更靠后、易够到）', color: 'info' },
+  { tier: '保', label: '保底', range: '院校位次低于考生位次 5000 名以上（明显有余量）', color: 'success' },
+] as const;
+
+/**
+ * 根据考生省排名位次与科类，从院校库中按冲稳保分档推荐（默认最近一年2025年、本科批、有实录位次的数据）
+ * 位次数字越小排名越靠前（越难考）：
+ *  - 院校位次比考生位次靠前 0—2000 名 → 冲
+ *  - 院校位次比考生位次靠后 0—5000 名 → 稳
+ *  - 院校位次比考生位次靠后 5000 名以上 → 保
+ */
+export function recommendByRank(userRank: number, subject: ISubject): { college: ICollegeScore; tier: ITier }[] {
+  const pool = COLLEGE_SCORES.filter(
+    (c) => c.subject === subject && c.year === 2025 && c.minRank !== null && c.minRank !== undefined && c.batch !== '专科批'
+  );
+  const result: { college: ICollegeScore; tier: ITier }[] = [];
+  for (const college of pool) {
+    const collegeRank = college.minRank as number;
+    const diff = userRank - collegeRank; // 正值=院校更靠前(考生位次更后，需冲刺)；负值=院校更靠后(考生位次更前，有余量)
+    let tier: ITier | null = null;
+    if (diff >= 0 && diff <= 2000) tier = '冲';
+    else if (diff < 0 && diff >= -5000) tier = '稳';
+    else if (diff < -5000) tier = '保';
+    if (tier) result.push({ college, tier });
+  }
+  const order: Record<ITier, number> = { 冲: 0, 稳: 1, 保: 2 };
+  return result.sort((a, b) => order[a.tier] - order[b.tier] || a.college.minRank! - b.college.minRank!);
+}
+
 /** 院校专业级录取分数线（从 majorScores.ts 导入） */
 export { MAJOR_SCORES };
 
